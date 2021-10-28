@@ -1,34 +1,34 @@
 h2#examples Examples
 
 p.
-  Let's start from a quick little example to get you a feel
-  of what is it like to program with Kefir.
-  First we create a stream of events
-  that will produce three numbers with interval of 100 milliseconds:
+  Давайте начнем с небольшого небольшого примера, чтобы вы почувствовали, каково
+  программировать с помощью Kefir. 
+  Сначала мы создаем поток событий, который выдаст три числа с интервалом 
+  в 100 миллисекунд:
 
 pre.javascript(title='example')
   :escapehtml
     var numbers = Kefir.sequentially(100, [1, 2, 3]);
 
 p.
-  Now let's create another stream based on the first one.
-  As you might guess, it will produce 2, 4, and 6.
+  Теперь создадим еще один поток на основе первого. 
+  Как вы могли догадаться, он произведет 2, 4 и 6.
 
 pre.javascript(title='example')
   :escapehtml
     var numbers2 = numbers.map(x => x * 2);
 
 p.
-  Suppose we don't want number 4 to be in the sequence,
-  no problem, we can filter it out:
+  Предположим, мы не хотим, чтобы число 4 было в последовательности, 
+  нет проблем, мы можем отфильтровать это:
 
 pre.javascript(title='example')
   :escapehtml
     var numbers3 = numbers2.filter(x => x !== 4);
 
 p.
-  Ok, I think numbers3 stream is what we want,
-  it's time to subscribe to it and to get the values:
+  Хорошо, я думаю, что поток Number3 - это то, что мы хотим, 
+  самое время подписаться на него и получить значения:
 
 pre.javascript(title='example')
   :escapehtml
@@ -62,23 +62,22 @@ script.
   }
 
 p
-  button(onClick='runExample1()') Run example
+  button(onClick='runExample1()') Запуск примера
 
 pre(title='logger output' id='example-log-1' style='min-height:18px')
 
 hr
 
 p.
-  Nice, here is another one. Let's this time begin from a streams based on
-  user actions instead of timer. First we create a stream that will contain
-  button click events:
+  Отлично, вот еще один. На этот раз начнем с потоков, основанных на действиях пользователя, 
+  а не на таймере. Сначала мы создаем поток, который будет содержать события нажатия кнопки:
 
 pre.javascript(title='example')
   :escapehtml
     var btnClicks = Kefir.fromEvents(document.querySelector('#ex-2-btn'), 'click');
 
 p.
-  Also let's create a stream of a text input value changes:
+  Также создадим поток изменений значения ввода текста:
 
 pre.javascript(title='example')
   :escapehtml
@@ -86,28 +85,29 @@ pre.javascript(title='example')
       .map(event => event.target.value);
 
 p.
-  That's a good beginning, we have streams representing user actions,
-  now we can transform and combine them to create our desired result stream.
-  First we want to have a #[a(href='#about-observables') property]
-  representing how many times user clicked the button,
-  we will use #[a(href='#scan') scan] method to create it:
+  Это хорошее начало, у нас есть потоки, представляющие действия пользователя,
+   теперь мы можем преобразовать и объединить их для создания желаемого 
+   потока результатов. Сначала мы хотим иметь #[a(href='#about-observables') property]
+  представляющий, сколько раз пользователь нажимал кнопку, мы будем использовать
+  метод #[a(href='#scan') scan] чтобы создать его:
 
 pre.javascript(title='example')
   :escapehtml
     var clicksCount = btnClicks.scan(sum => sum + 1, 0);
 
 p.
-  Now we have two numbers, first is clicks count, and second is text field
-  content, which actually a string, but let's fix that:
+  Теперь у нас есть два числа, первое - это количество кликов, а второе - 
+  это содержимое текстового поля, которое на самом деле является строкой,
+  давайте исправим это:
 
 pre.javascript(title='example')
   :escapehtml
     var inputNumber = inputValue.map(text => parseInt(text, 10));
 
 p.
-  Done, but now it can produce the #[tt NaN] if user type "banana" or something
-  instead of a number. Let's fix this too
-  using #[a(href='#about-errors') errors handling] that Kefir provides:
+  Готово, но теперь он может выдавать NaN, если пользователь вводит «банан» или 
+  что-то в этом роде вместо числа. Давайте исправим и это, используя
+  #[a(href='#about-errors') обработку ошибок] предоставляемую Kefir:
 
 pre.javascript(title='example')
   :escapehtml
@@ -118,15 +118,15 @@ pre.javascript(title='example')
     );
 
 p.
-  Almost done, final step is to combine our two dynamic number values.
-  Suppose we want to multiply them:
+  Почти готово, последний шаг - объединить два наших динамических числовых значения. 
+  Предположим, мы хотим их умножить:
 
 pre.javascript(title='example')
   :escapehtml
     var theResult = Kefir.combine([fixedInputNumber, clicksCount], (a, b) => a * b);
 
 p.
-  Good, let's display the result:
+  Хорошо, выведем результат:
 
 pre.javascript(title='example')
   :escapehtml
@@ -141,11 +141,11 @@ pre.javascript(title='example')
       });
 
 p
-  button(id='ex-2-btn') click me
+  button(id='ex-2-btn') нажми меня
   = ' '
   span(id='ex-2-count-output')
   = ' * '
-  input(id='ex-2-input' placeholder='try "banana"')
+  input(id='ex-2-input' placeholder='попробуй "банан"')
   = ' =  '
   span(id='ex-2-output')
 
@@ -190,35 +190,36 @@ script.
 
 hr
 
-h3#more-examples More examples
+h3#more-examples Ещё примеры
 
 ul
   li
-    a(href="http://jsfiddle.net/fxv6dpo2/") Click to alert
+    a(href="http://jsfiddle.net/fxv6dpo2/") Клик для alert
     = " (a most basic example)"
   li
-    a(href="http://jsfiddle.net/vyppkj0k/3/") Clock
+    a(href="http://jsfiddle.net/vyppkj0k/3/") Часы
     = " + "
-    a(href="http://jsfiddle.net/vyppkj0k/4/") Controlled by scrolling
+    a(href="http://jsfiddle.net/vyppkj0k/4/") Управление прокруткой
     = " + "
-    a(href="http://jsfiddle.net/vyppkj0k/5/") Controlled by both time and scrolling
+    a(href="http://jsfiddle.net/vyppkj0k/5/") Управление и по времени и прокруткой
   li
-    a(href="http://jsfiddle.net/tn0z97e1/") Multiple clicks
+    a(href="http://jsfiddle.net/tn0z97e1/") МНожественный клики
   li
-    a(href="http://jsfiddle.net/cbg9rdd3/") The “Secret combination” challenge
+    a(href="http://jsfiddle.net/cbg9rdd3/") “Секретная комбинация" челлендж
     = " "
-    | (from #[a(href="http://www.jayway.com/2014/09/16/comparing-core-async-and-rx-by-example/") here])
+    | (отсюда #[a(href="http://www.jayway.com/2014/09/16/comparing-core-async-and-rx-by-example/") ])
   li
-    a(href="http://jsfiddle.net/4Lx9ktpp/") Drag a div
+    a(href="http://jsfiddle.net/4Lx9ktpp/") Перетаскиваем div
   li
-    a(href="http://jsfiddle.net/8sd79x3L/") Tree
+    a(href="http://jsfiddle.net/8sd79x3L/") Дерево
     = " (Bacon.js vs Kefir.js performance comparison)"
   li
-    a(href="http://jsfiddle.net/v1Lesw91/") AJAX search
+    a(href="http://jsfiddle.net/v1Lesw91/") AJAX поиск
     = " (with errors handling and cancelation)"
 
 
 p.
   #[img(data-emoji="information_desk_person")]
-  Also, almost any code snippet below can be run in the browser console, on this page.
-  So you can play with Kefir right now, just open up the browser console.
+  Кроме того, на этой странице в консоли браузера можно запустить практически любой
+  приведенный ниже фрагмент кода. 
+  Так что вы можете играть с Кефиром прямо сейчас, просто откройте консоль браузера.

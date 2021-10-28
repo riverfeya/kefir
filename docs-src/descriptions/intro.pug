@@ -4,32 +4,32 @@ h1
   sup #{pkg.version} (<a href="https://github.com/kefirjs/kefir/blob/master/changelog.md">changelog</a>)
 
 p.
-  Kefir &mdash; is a Reactive Programming
-  library for JavaScript inspired by
+  Kefir &mdash; это библиотека реактивного программирования
+  для JavaScript по мотивам
   <a href="https://github.com/baconjs/bacon.js">Bacon.js</a>
-  and
+  и
   <a href="http://reactivex.io/rxjs/">RxJS</a>,
-  with focus on high performance and low memory usage.
+  с фокусом на высокую производительность и  низкое потребление памяти.
 
 
 p.
-  Kefir has a
+  Kefir имеет
   <a href="https://github.com/kefirjs/kefir">
-    <img data-emoji="octocat"> GitHub repository</a>, where you can
-  <a href="https://github.com/kefirjs/kefir/pulls">send pull requests</a>,
-  <a href="https://github.com/kefirjs/kefir/issues">report bugs</a>,
-  and have fun reading
-  <a href="https://github.com/kefirjs/kefir/tree/master/src">source code</a>.
+    <img data-emoji="octocat"> GitHub репозиторий</a>, где вы можете
+  <a href="https://github.com/kefirjs/kefir/pulls">посылать пулл-реквесты</a>,
+  <a href="https://github.com/kefirjs/kefir/issues">баг-репортить</a>,
+  и почитать интересности
+  <a href="https://github.com/kefirjs/kefir/tree/master/src">исходный код</a>.
 
 p.
   See also
-  #[a(href='https://github.com/kefirjs/kefir/blob/master/deprecated-api-docs.md') Deprecated API docs].
+  #[a(href='https://github.com/kefirjs/kefir/blob/master/deprecated-api-docs.md') Устаревшее API docs].
 
 
-h2#installation Installation
+h2#installation Установка
 
 p.
-  Kefir is available as an NPM and a Bower package, as well as a simple file download.
+  Kefir доступен как NPM и Bower пакет, и как одиночный загружаемый файл.
 
 h3#npm NPM
 
@@ -41,27 +41,24 @@ h3#bower Bower
 pre.
   bower install kefir
 
-h3#downloads Downloads <sup>(#{pkg.version})</sup>
+h3#downloads Загрузка <sup>(#{pkg.version})</sup>
 
 table
   tr
-    th(rowspan="1" valign="top") For Development
+    th(rowspan="1" valign="top") Для разработки
     td: a(href='dist/kefir.js') kefir.js
     td: i ~ 100 KB
   tr
-    th(rowspan="1" valign="top") For Production
+    th(rowspan="1" valign="top") Для продакшн
     td: a(href='dist/kefir.min.js') kefir.min.js
-    td: i ~ 10 KB (when gzipped)
+    td: i ~ 10 KB (если gzipped)
 
   tr
     td.rule(colspan="3")
   tr
-    th All files
+    th Все файлы
     td: a(href='https://github.com/kefirjs/kefir/archive/' + pkg.version + '.zip') kefir-#{pkg.version}.zip
-    td ... including documentation, tests, source maps, etc.
+    td ... включая документацию, тесты, исходные maps, и т.п.
 
 p.
-  Kefir also available on #[a(href='http://www.jsdelivr.com/#!kefir') jsDelivr].
-
-
-
+  Kefir также лоступен на #[a(href='http://www.jsdelivr.com/#!kefir') jsDelivr].
