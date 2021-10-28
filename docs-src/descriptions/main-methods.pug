@@ -82,16 +82,15 @@ pre(title='console output')
     > value: 2
 
 +descr-method('off-value', 'offValue', 'obs.offValue(callback)').
-  Unsubscribes #[b callback] from values on an observable.
+  Отписывает #[b callback] от значений в observable.
 
 
 +descr-method('on-error', 'onError', 'obs.onError(callback)').
-  Subscribes #[b callback] to #[a(href='#about-errors') errors] on an observable.
+  Подписывает #[b callback] на #[a(href='#about-errors') ошибки] в observable.
 
 p.
-  If called on a property, which has a current error,
-  #[b callback] will be called immediately (synchronously)
-  with that error.
+  Если вызывается свойство, в котором есть текущая ошибка,
+  #[b callback] будет вызываться немедленно (синхронно) с этой ошибкой.
 
 pre.javascript(title='example')
   :escapehtml
@@ -105,14 +104,14 @@ pre(title='console output')
     > error: 1
 
 +descr-method('off-error', 'offError', 'obs.offError(callback)').
-  Unsubscribes #[b callback] from errors on an observable.
+  Отписывает #[b callback] от ошибок в observable.
 
 
 +descr-method('on-end', 'onEnd', 'obs.onEnd(callback)').
-  Subscribes #[b callback] to ending of an observable.
+  Подписывает #[b callback] на завершение observable.
 
 p.
-  If observable is already ended, #[b callback] will be called immediately (synchronously).
+  Если observable уже завершен, #[b callback], обратный вызов будет вызываться немедленно (синхронно).
 
 pre.javascript(title='example')
   :escapehtml
@@ -126,16 +125,16 @@ pre(title='console output')
     > stream ended
 
 +descr-method('off-end', 'offEnd', 'obs.offEnd(callback)').
-  Unsubscribes #[b callback] from ending of an observable.
+  Отписывает #[b callback] от завершения observable.
 
 +descr-method('on-any', 'onAny', 'obs.onAny(callback)').
-  Subscribes #[b callback] to all three types of events.
-  Callback is called with an #[b event object] as argument. Each event object
-  contains three attributes — #[b type], #[b value], and #[b current].
+  Подписывает #[b callback] на все три типа событий.
+  Callback вызывается с #[b event объектом] в качестве аргумента. Каждый объект event
+  содержит три атрибута — #[b type], #[b value], и #[b current].
 
 ul
-  li #[b type] — a #[tt 'value'], #[tt 'error'], or #[tt 'end'] string
-  li #[b value] — the emitted #[b value] or #[b error] (#[tt undefined] if #[tt event.type === 'end'])
+  li #[b type] — это строка #[tt 'value'], #[tt 'error'], или #[tt 'end'] 
+  li #[b value] — выданное #[b value] или #[b error] (#[tt undefined] если #[tt event.type === 'end'])
 
 pre.javascript(title='example')
   :escapehtml
@@ -151,11 +150,12 @@ pre(title='console output')
     > event: Object {type: "end", value: undefined}
 
 +descr-method('off-any', 'offAny', 'obs.offAny(callback)').
-  Unsubscribes an #[b onAny] subscriber.
+  Отписывается от #[b onAny] подписчика.
 
 +descr-method('log', 'log', 'obs.log([name])').
-  Turns on logging of any event to the browser console.
-  Accepts an optional #[b name] argument that will be shown in the log if provided.
+  Включает запись любого события в консоль браузера.
+  Принимает опциональный аргумент #[b name] который будет показан в логе если он
+   предоставлен.
 
 pre.javascript(title='example')
   :escapehtml
@@ -169,13 +169,14 @@ pre(title='console output')
     > my stream <end>
 
 +descr-method('off-log', 'offLog', 'obs.offLog([name])').
-  Turns off logging. If #[b .log] was called with a #[b name] argument,
-  #[b offLog] must be called with the same #[b name] argument.
+  Выключает отображение лога. Если #[b .log] вызывался с аргументом #[b name], то и
+  #[b offLog] должен быть вызван с тем-же аргументом #[b name].
 
 +descr-method('spy', 'spy', 'obs.spy([name])').
-  Turns on spying of any event to the browser console. Similar to
-  #[b .log], however #[b .spy] will not cause the stream to activate by itself.
-  Accepts an optional #[b name] argument that will be shown in the log if provided.
+  Включает слежку за любым событием в консоли браузера. Однако как и
+  #[b .log], #[b .spy] не вызовет активацию потока сам по себе.
+  Принимает опциональный аргумент #[b name] который будет отображен в логе если он
+   предоставлен.
 
 pre.javascript(title='example')
   :escapehtml
@@ -191,5 +192,5 @@ pre(title='console output')
     > spied <end>
 
 +descr-method('off-spy', 'offSpy', 'obs.offSpy([name])').
-  Turns off spying. If #[b .spy] was called with a #[b name] argument,
-  #[b offSpy] must be called with the same #[b name] argument.
+  Отключает слежку. Если #[b .spy] был вызван с аргументом #[b name],
+  #[b offSpy] должен быть вызван с тем же аргументом #[b name].
