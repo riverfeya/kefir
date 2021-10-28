@@ -1,18 +1,18 @@
-h2#convert Convert observables
+h2#convert Конвертирование observables
 
 
 +descr-method('to-property', 'toProperty', 'stream.toProperty([getCurrent])').
-  Converts a stream to a property.
-  Accepts an optional #[b getCurrent] callback, which will be called on
-  each #[a(href='#active-state') activation] to get the current value at that moment.
+  Конвертирует поток в property.
+  Принимает необязательный обратный вызов #[b getCurrent] , который будет вызываться
+  при каждой #[a(href='#active-state') активации] для получения текущего значения в этот момент.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.toProperty(() => 0);
     result.log();
 
-pre(title='console output')
+pre(title='вывод в консоль')
   :escapehtml
     > [sequentially.toProperty] <value:current> 0
     > [sequentially.toProperty] <value> 1
@@ -20,7 +20,7 @@ pre(title='console output')
     > [sequentially.toProperty] <value> 3
     > [sequentially.toProperty] <end>
 
-pre(title='events in time').
+pre(title='события во времени).
   source:  ----1----2----3X
   result: 0----1----2----3X
 div
@@ -28,13 +28,13 @@ div
 
 
 +descr-method('changes', 'changes', 'property.changes()').
-  Converts a property to a stream.
-  If the property has a current value (or error), it will be ignored
-  (subscribers of the stream won't get it).
+  Конвертирует property в stream.
+  Если свойство имеет текущее значение (или ошибку), оно будет проигнорировано
+  (подписчики потока его не получат).
 
 p.
-  If you call #[b changes] on a stream, it will return a new stream with
-  #[a(href='#current-in-streams') current values/errors] removed.
+  Если вы вызываете #[b changes] в потоке, будет возвращен новый поток с удаленным
+  #[a(href='#current-in-streams') текущим значением/ошибкой].
 
 pre.javascript(title='example')
   :escapehtml
