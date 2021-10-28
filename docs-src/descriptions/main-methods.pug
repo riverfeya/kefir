@@ -1,18 +1,17 @@
 h2#main-methods Subscribe / add side effects
 
 +descr-method('observe', 'observe', 'obs.observe(observer) obs.observe([onValue], [onError], [onEnd])').
-  Subscribes the provided #[b observer] to #[b obs]. Observer is an object with 3 optional methods:
+  Подписывает предоставленного #[b observer] на #[b obs]. Observer это объект с тремя не обязательными методами:
 
 ul
-  li #[b value] - called on values from the observable
-  li #[b error] - called on errors from the observable
-  li #[b end] - called on end of the observable
+  li #[b value] - вызывается в значениях из observable
+  li #[b error] - вызывается в ошибках из observable
+  li #[b end] - вызывается в конце observable
 
 p.
-  Returns a #[tt Subscription] object, which has
-  an #[tt unsubscribe] method and a read-only #[tt closed] property.
-  #[tt closed] indicates whether the #[tt unsubscribe] method has been called
-  or the observable have ended.
+  Возвращает объект подписки, #[tt Subscription], который имеет метод отмены подписки
+  #[tt unsubscribe] и read-only свойство #[tt closed].
+  #[tt closed] указывает был ли вызван метод #[tt unsubscribe] или observable завершился.
 
 pre.javascript(title='example')
   :escapehtml
@@ -41,7 +40,7 @@ pre(title='console output')
     > end
 
 p.
-  In addition to passing in an Observer, #[tt observe] can takes callbacks individually:
+  В дополнение к передаче Observer, #[tt observe] может принимать обратные вызовы индивидуально:
 
 pre.javascript(title='example')
   :escapehtml
@@ -59,17 +58,16 @@ pre.javascript(title='example')
     );
 
 p.
-  #[img(data-emoji="point_up")] This methods is designed to replace all other methods for
-  subscribing (onValue, offValue, onError, etc). It's recomented to use #[b observe]
-  instead of other methods, they will be removed eventually.
+  #[img(data-emoji="point_up")] Эти методы предназначены для замены всех других методов подписки.
+  (onValue, offValue, onError, etc). Рекомендуется использовать #[b observe]
+  вместо других методов, со временем они будут удалены.
 
 +descr-method('on-value', 'onValue', 'obs.onValue(callback)').
-  Subscribes #[b callback] to values on an observable.
+  Подписывает обратный вызов #[b callback] на значения observable.
 
 p.
-  If called on a property, which has a current value,
-  #[b callback] will be called immediately (synchronously)
-  with that value.
+  При вызове свойства, имеющего текущее значение, 
+  #[b callback] будет вызываться немедленно (синхронно) с этим значением.
 
 pre.javascript(title='example')
   :escapehtml
@@ -195,4 +193,3 @@ pre(title='console output')
 +descr-method('off-spy', 'offSpy', 'obs.offSpy([name])').
   Turns off spying. If #[b .spy] was called with a #[b name] argument,
   #[b offSpy] must be called with the same #[b name] argument.
-
