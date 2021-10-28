@@ -1,18 +1,19 @@
-h2#about-observables Intro to Streams and Properties
+h2#about-observables Введение в потоки (Streams) и свойства (Properties)
 
 p.
-  Kefir supports two types of observables — streams and properties.
-  Streams represent sequences of events made available over time. And properties represent
-  values that change over time. The value of a property changes in response to events,
-  which means that any stream may be easily converted to a property.
+  Kefir поддерживает два типа observables — streams и properties.
+  Потоки представляют собой последовательности событий, которые становятся
+  доступными с течением времени. А свойства представляют собой значения,
+  которые меняются во времени. Значение свойства изменяется в ответ на события, 
+  что означает, что любой поток можно легко преобразовать в свойство.
 
 figure
   img(src='docs-src/images/stream-and-property.png')
 
 p.
-  In practice, the only difference between the two types of observables
-  is that properties may have a current value. The process of subscribing
-  to both types of observables is the same: you call the #[a(href='#on-value') onValue]
-  method, passing a callback function to it. But when you subscribe
-  to a property which has a current value, the callback is called
-  immediately (synchronously) with the current value of the property.
+  На практике единственная разница между двумя типами observables состоит в том, 
+  что свойства могут иметь текущее значение.
+  Процесс подписки на оба типа observables одинаков: вы вызываете метод #[a(href='#on-value') onValue], 
+  передавая ему функцию обратного вызова.
+  Но когда вы подписываетесь на свойство, которое имеет текущее значение, обратный вызов
+  вызывается немедленно (синхронно) с текущим значением свойства.

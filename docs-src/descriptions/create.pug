@@ -1,11 +1,10 @@
-h2#create-stream Create a stream
-
+h2#create-stream Создание потока
 
 
 
 
 +descr-method('never', 'never', 'Kefir.never()').
-  Creates a stream that already ended and will never produce any events.
+  Создает поток, который уже закончился и никогда не будет производить никаких событий.
 
 pre.javascript(title='example').
   var stream = Kefir.never();
@@ -23,8 +22,7 @@ div
 
 
 +descr-method('later', 'later', 'Kefir.later(wait, value)').
-  Creates a stream that produces a single #[b value]
-  after #[b wait] milliseconds, then ends.
+  Создает поток, который производит одно #[b value] после #[b wait] миллисекунд, а затем завершается.
 
 pre.javascript(title='example').
   var stream = Kefir.later(1000, 1);
@@ -43,8 +41,7 @@ div
 
 
 +descr-method('interval', 'interval', 'Kefir.interval(interval, value)').
-  Creates a stream that produces the same #[b value]
-  each #[b interval] milliseconds. Never ends.
+  Создает поток, который выдает одно и то же #[b value] каждый #[b interval] миллисекунд. Никогда не заканчивается.
 
 pre.javascript(title='example').
   var stream = Kefir.interval(1000, 1);
@@ -63,9 +60,9 @@ div
 
 
 +descr-method('sequentially', 'sequentially', 'Kefir.sequentially(interval, values)').
-  Creates a stream containing the given #[b values] (array),
-  delivered with the given #[b interval] in milliseconds.
-  Ends after all #[b values] are delivered.
+  Создает поток, содержащий заданные #[b values] (array),
+  доставленный с заданным #[b interval] в миллисекундах. Заканчивается после доставки всех #[b values]. 
+  
 
 pre.javascript(title='example').
   var stream = Kefir.sequentially(1000, [1, 2, 3]);
@@ -85,10 +82,9 @@ div
 
 
 +descr-method('from-poll', 'fromPoll', 'Kefir.fromPoll(interval, fn)').
-  Creates a stream that polls the given #[b fn] function,
-  with the given #[b interval] in milliseconds,
-  and emits the values returned by #[b fn].
-  Never ends.
+  Создает поток, который опрашивает заданную функцию #[b fn],
+  с заданным интервалом #[b interval] в миллисекундах и выдает значения возвращенные
+  этой функцией. Никогда не заканчивается.
 
 pre.javascript(title='example')
   :escapehtml
@@ -113,11 +109,11 @@ div
 
 
 +descr-method('with-interval', 'withInterval', 'Kefir.withInterval(interval, handler)').
-  General method to create an interval based stream.
-  Creates a stream that calls the given #[b handler] function,
-  with the given #[b interval] in milliseconds.
-  The #[b handler] function is called with one argument —
-  an #[a(href="#emitter-object") emitter].
+  Общий метод создания потока на основе интервала.
+  Создает поток, который вызывает заданную функцию-обработчик - #[b handler],
+  с заданным интервалом #[b interval] в миллисекундах.
+  The #[b handler] Функция-обработчик вызывается с одним аргументом - 
+  an #[a(href="#emitter-object") эмиттером].
 
 pre.javascript(title='example')
   :escapehtml
@@ -145,22 +141,20 @@ pre(title='events in time').
 div
 
 p.
-  You may call #[b emitter] methods several times on each interval tick,
-  or not call them at all.
+  Вы можете вызывать методы-эмиттеры несколько раз на каждом тике интервала или не вызывать их вообще.
 
 
 
 +descr-method('from-callback', 'fromCallback', 'Kefir.fromCallback(fn)').
-  Convert a function that accepts a #[b callback]
-  as the first argument to a stream.
-  Emits at most one value when #[b callback] is called, then ends.
-  The #[b fn] function will be called at most once,
-  when the first subscriber will be added to the stream.
+  Преобразуйте функцию, которая принимает обратный вызов #[b callback]
+  в качестве первого аргумента потока.
+  Выдает не более одного значения, когда вызывается #[b callback], а затем завершается.  
+  Функция #[b fn] будет вызываться не более одного раза, когда в поток будет добавлен первый подписчик.
 
 pre.javascript(title='example')
   :escapehtml
     var stream = Kefir.fromCallback(callback => {
-      // we use setTimeout here just to simulate some asynchronous activity
+      // мы используем setTimeout здесь просто для имитации некоторой асинхронной активности
       setTimeout(() => callback(1), 1000);
     });
     stream.log();
@@ -177,17 +171,17 @@ div
 
 
 +descr-method('from-node-callback', 'fromNodeCallback', 'Kefir.fromNodeCallback(fn)').
-  Similar to #[a(href='#from-callback') fromCallback],
-  but the #[b callback] passed to #[b fn]
-  is a Node.JS style callback — #[tt callback(error,&nbsp;result)].
-  If the #[b error] argument of the #[b callback] is truthy,
-  an error will be emitted from the result stream, otherwise a value is emitted.
-  The stream will end after the first value or on error.
+  Похоже на #[a(href='#from-callback') fromCallback],
+  но обратный вызов #[b callback] переданный в #[b fn]
+  является обратным вызовом в стиле Node.JS  — #[tt callback(error,&nbsp;result)].
+  Если аргумент ошибки #[b error] коллбэка #[b callback] истинный,
+  из потока результатов будет выдана ошибка, в противном случае будет выдано значение. 
+  Поток завершится после первого значения или при ошибке.
 
 pre.javascript(title='example')
   :escapehtml
     var stream = Kefir.fromNodeCallback(callback => {
-      // we use setTimeout here just to simulate some asynchronous activity
+      // мы используем setTimeout здесь просто для имитации некоторой асинхронной активности
       setTimeout(() => callback(null, 1), 1000);
     });
     stream.log();
@@ -204,15 +198,15 @@ div
 
 
 +descr-method('from-event', 'fromEvents', 'Kefir.fromEvents(target, eventName, [transform])').
-  Creates a stream from events on a DOM EventTarget or a Node.JS EventEmitter
-  object, or an object that supports event listeners using #[tt on/off] methods (e.g. a jQuery object).
+  Создает поток из событий в DOM EventTarget или объекте EventEmitter Node.JS, или в объекте, 
+  который поддерживает прослушиватели событий, использующие методы #[tt on/off] (например объект jQuery).
 
 p.
-  If a #[b transform] function is provided, it will be called on each event
-  with the same arguments and context (#[tt this]) as the event listener callback.
-  And the value returned by #[b transform] will be emitted from the stream.
-  If no #[b transform] function is provided, the first argument of the callback is emitted by default,
-  i.e. the function #[tt x&nbsp;=&gt;&nbsp;x] is used as #[b transform].
+  Если предоставлена функция #[b transform], он будет вызываться для каждого
+  события с теми же аргументами и контекстом (#[tt this]) что и обратный вызов слушателя событий
+  И значение, возвращаемое #[b transform] будет выдано из потока.
+  Если функция #[b transform] не указана, по умолчанию излучается первый аргумент 
+  обратного вызова, т.е. функция #[tt x&nbsp;=&gt;&nbsp;x] используется как #[b transform].
 
 pre.javascript(title='example')
   :escapehtml
@@ -235,11 +229,12 @@ div
 
 a(name='from-binder')
 +descr-method('stream', 'stream', 'Kefir.stream(subscribe)').
-  Creates a general purpose stream. The #[b subscribe] callback is
-  called on each #[a(href='#active-state') activation],
-  and if a function is returned from #[b subscribe], it will be called on the following #[b deactivation].
-  The #[b subscribe] function is called with #[a(href="#emitter-object") emitter] as an argument,
-  which can be used to emit events from the result stream.
+  Создает поток общего назначения. Обратный вызов подписки #[b subscribe] 
+  вызывается при каждой #[a(href='#active-state') активации],
+  и если функция возвращается из подписки #[b subscribe], она будет вызываться при 
+  следующей деактивации #[b deactivation].
+  Функция подписки #[b subscribe] вызывается с #[a(href="#emitter-object") эмиттером] 
+  в качестве аргумента, который можно использовать для генерации событий из потока результатов.
 
 pre.javascript(title='example')
   :escapehtml
@@ -280,12 +275,12 @@ div
 
 
 
-h2#create-property Create a property
+h2#create-property Создание свойства (property)
 
 
 
 +descr-method('constant', 'constant', 'Kefir.constant(value)').
-  Creates an ended property, with the specified #[b current value].
+  Создает законченное свойство с указанным текущим значением #[b current value].
 
 pre.javascript(title='example').
   var property = Kefir.constant(1);
@@ -303,7 +298,7 @@ div
 
 
 +descr-method('constant-error', 'constantError', 'Kefir.constantError(error)').
-  Creates an ended property, with the specified #[b current error].
+  Создает завершенное свойство с указанной текущей ошибкой #[b current error].
 
 pre.javascript(title='example').
   var property = Kefir.constantError(1);
