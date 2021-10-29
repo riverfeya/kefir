@@ -1,30 +1,29 @@
-h2#modify Modify an observable
+h2#modify Изменение observable
 
 p.
-  Most methods in this section create a new observable of same type* from an original one.
-  The new observable applies some transformation to each event from the original one
-  and emits the result of the transformation.
-  In most cases a transformation is applied only to #[b value] events,
-  #[b end] and #[b error] events just passes through untouched.
+  Большинство методов в этом разделе создают новый observable того же типа* 
+  что и исходный. Новый observable применяет некоторое преобразование к каждому 
+  событию из исходного и испускает результат преобразования.
+  В большинстве случаев преобразование применяется только к #[b value] events,
+  #[b end] и #[b error] events просто проходят через них нетронутыми.
 
 p.
-  #[b *] For example if the original observable was a stream,
-  then the new one will also be a stream. Same for properties.
-
+  #[b *] Например, если исходный наблюдаемый объект был потоком, 
+  то новый также будет потоком. То же самое и со свойствами.
 
 
 
 +descr-method('map', 'map', 'obs.map(fn)').
-  Applies the given #[b fn] function to each value from the original observable
-  and emits the value returned by #[b fn].
+  Применяет данную функцию #[b fn] function к каждому значению из исходного observable
+  и выдает значение, возвращаемое функцией #[b fn].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.map(x => x + 1);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.map] <value> 2
     > [sequentially.map] <value> 3
@@ -32,7 +31,7 @@ pre(title='console output')
     > [sequentially.map] <end>
 div
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---3X
   result: ---2---3---4X
 div
@@ -41,22 +40,22 @@ div
 
 
 +descr-method('map-errors', 'mapErrors', 'obs.mapErrors(fn)').
-  Same as #[a(href='#map') map] but for #[a(href='#about-errors') errors].
+  То же, что и #[a(href='#map') map] но для #[a(href='#about-errors') ошибок].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]).flatMap(Kefir.constantError);
     var result = source.mapErrors(x => x * 2);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatMap.mapErrors] <error> 2
     > [sequentially.flatMap.mapErrors] <error> 4
     > [sequentially.flatMap.mapErrors] <error> 6
     > [sequentially.flatMap.mapErrors] <end>
 
-pre(title='events in time')
+pre(title='события во времени')
   :escapehtml
     source:  ---e---e---e---eX
                 0   1   2   3
@@ -68,51 +67,51 @@ div
 
 
 +descr-method('filter', 'filter', 'obs.filter([predicate])').
-  Filters values from the original observable
-  using the given #[b predicate] function.
+  Фильтрует значения из исходного observable
+  с использованием заданной #[b predicate] функции.
 
 p.
-  If no #[b predicate] is provided, the function #[tt x =&gt; x] will be used.
+  Если #[b predicate] не предоставлен, будет использоваться функция #[tt x =&gt; x].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.filter(x => x > 1);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.filter] <value> 2
     > [sequentially.filter] <value> 3
     > [sequentially.filter] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---3X
   result: -------2---3X
 div
 
 p.
-  See also <a href="#filter-by">filterBy</a>.
+  См. также <a href="#filter-by">filterBy</a>.
 
 
 
 
 +descr-method('filter-errors', 'filterErrors', 'obs.filterErrors([predicate])').
-  Same as #[a(href='#filter') filter] but for #[a(href='#about-errors') errors].
+  То-же что и #[a(href='#filter') фильтр] но для #[a(href='#about-errors') ошибок].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [0, 1, 2, 3]).flatMap(Kefir.constantError);
     var result = source.filterErrors(x => (x % 2) === 0);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatMap.filterErrors] <error> 0
     > [sequentially.flatMap.filterErrors] <error> 2
     > [sequentially.flatMap.filterErrors] <end>
 
-pre(title='events in time')
+pre(title='события во времени')
   :escapehtml
     source:  ---e---e---e---eX
                 0   1   2   3
@@ -125,21 +124,21 @@ div
 
 
 +descr-method('take', 'take', 'obs.take(n)').
-  Emits the first #[b n] values from the original observable, then ends.
+  выдает первые #[b n] значений из исходного observable, затем завершается.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.take(2);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.take] <value> 1
     > [sequentially.take] <value> 2
     > [sequentially.take] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---3X
   result: ---1---2X
 div
@@ -147,23 +146,23 @@ div
 
 
 +descr-method('take-errors', 'takeErrors', 'obs.takeErrors(n)').
-  Emits the first #[b n] #[a(href='#about-errors') errors] from the
-  original observable, then ends. Values just flow through.
+  Выдает первые #[b n] #[a(href='#about-errors') ошибок] из исходного
+  observable, затем завершается. Значения просто проходят сквозь.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3])
       .flatMap(x => Kefir.constantError(x));
     var result = source.takeErrors(2);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatMap.takeErrors] <error> 1
     > [sequentially.flatMap.takeErrors] <error> 2
     > [sequentially.flatMap.takeErrors] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---e---e---eX
              1   2   3
   result: ---e---eX
@@ -173,70 +172,70 @@ div
 
 
 +descr-method('take-while', 'takeWhile', 'obs.takeWhile([predicate])').
-  Emits values from the original observable until the given #[b predicate]
-  function applied to a value returns false.
-  Ends when the #[b predicate] returns false.
+  значения из исходного observable пока данная функция #[b predicate]
+  примененная к значению, не вернет false.
+  Заканчивается, когда #[b predicate] возвращает false.
 
 p.
-  If no #[b predicate] is provided, the function #[tt x =&gt; x] will be used.
+  Если #[b predicate] не предоставлен, будет использована функция #[tt x =&gt; x]
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.takeWhile(x => x < 3);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.takeWhile] <value> 1
     > [sequentially.takeWhile] <value> 2
     > [sequentially.takeWhile] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---3X
   result: ---1---2---X
 div
 
 p.
-  See also <a href="#take-while-by">takeWhileBy</a>.
+  См. также <a href="#take-while-by">takeWhileBy</a>.
 
 
 
 +descr-method('last', 'last', 'obs.last()').
-  Emits only the last value from the original observable.
+  Выдает только последнее значение из исходного observable.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.last();
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.last] <value> 3
     > [sequentially.last] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---3X
   result: -----------3X
 div
 
 
 +descr-method('skip', 'skip', 'obs.skip(n)').
-  Skips the first #[b n] values from the original observable, then emits all the rest.
+  Пропускает первые #[b n] значений из исходного observable, затем выводит все остальные.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.skip(2);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.skip] <value> 3
     > [sequentially.skip] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---3X
   result: -----------3X
 div
@@ -244,26 +243,26 @@ div
 
 
 +descr-method('skip-while', 'skipWhile', 'obs.skipWhile([predicate])').
-  Skips values from the original observable until the given #[b predicate]
-  function applied to a value returns false,
-  then stops applying the #[b predicate] to values and emits all of them.
+  Пропускает значения из исходного наблюдаемого до тех пор, пока данная функция #[b predicate]
+  function примененная к значению, не вернет false,
+  затем прекращает применение #[b predicate] к значениям и генерирует их все.
 
 p.
-  If no #[b predicate] is provided, the function #[tt x =&gt; x] will be used.
+  Если #[b predicate] не предоставлен, будет использована функция #[tt x =&gt; x]
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 3, 2]);
     var result = source.skipWhile(x => x < 3);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.skipWhile] <value> 3
     > [sequentially.skipWhile] <value> 2
     > [sequentially.skipWhile] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---3---2X
   result: -------3---2X
 div
@@ -271,16 +270,16 @@ div
 
 
 +descr-method('skip-duplicates', 'skipDuplicates', 'obs.skipDuplicates([comparator])').
-  Skips duplicate values using #[tt ===] for comparison.
-  Accepts an optional #[b comparator] function which is then used instead of #[tt ===].
+  Пропускает дублирующиеся значения используя для сравнения #[tt ===] .
+  Принимает опциональную функцию #[b comparator] которая затем используется вместо #[tt ===].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 2, 3, 1]);
     var result = source.skipDuplicates();
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.skipDuplicates] <value> 1
     > [sequentially.skipDuplicates] <value> 2
@@ -288,14 +287,14 @@ pre(title='console output')
     > [sequentially.skipDuplicates] <value> 1
     > [sequentially.skipDuplicates] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---2---3---1X
   result: ---1---2-------3---1X
 div
 
-p With custom #[b comparator] function:
+p С кастомной функцией #[b comparator]:
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 2.1, 3, 1]);
     var result = source.skipDuplicates(
@@ -303,7 +302,7 @@ pre.javascript(title='example')
     );
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.skipDuplicates] <value> 1
     > [sequentially.skipDuplicates] <value> 2
@@ -311,7 +310,7 @@ pre(title='console output')
     > [sequentially.skipDuplicates] <value> 1
     > [sequentially.skipDuplicates] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---•---3---1X
                    2.1
   result: ---1---2-------3---1X
@@ -320,26 +319,26 @@ div
 
 
 +descr-method('diff', 'diff', 'obs.diff([fn], [seed])').
-  On each value from the original observable, calls the #[b fn]
-  function with the previous and current values as arguments.
-  At first time, calls #[b fn] with #[b seed] and current value.
-  Emits whatever #[b fn] returns.
+  Для каждого значения из исходного observable, вызывает функцию #[b fn]
+  function с предыдущим и текущим значениями в качестве аргументов.
+  В первый раз вызывает #[b fn] с #[b seed] и current значением.
+  Испускает все, что возвращает #[b fn].
 
 p.
-  If no #[b seed] is provided, the first value will be used as a seed,
-  and the result observable won't emit on first value.
+  Если начальное значение #[b seed] не указано, первое значение будет использоваться 
+  в качестве начального значения, а наблюдаемый результат не будет генерировать первое значение.
 
 p.
-  If no #[b fn] function is provided, #[tt (a, b) =&gt; [a, b]] will be used.
-  If you want to omit #[b fn] but provide #[b seed], pass #[tt null] as #[b fn].
+  Если функция #[b fn] не указана, будет использоваться #[tt (a, b) =&gt; [a, b]].
+  Если вы хотите опустить #[b fn] но указать #[b seed], передайте #[tt null] как #[b fn].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 2, 3]);
     var result = source.diff((prev, next) => next - prev, 0);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.diff] <value> 1
     > [sequentially.diff] <value> 1
@@ -347,7 +346,7 @@ pre(title='console output')
     > [sequentially.diff] <value> 1
     > [sequentially.diff] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source: ---1---2---2---3X
   result: ---1---1---0---1X
 div
@@ -355,23 +354,22 @@ div
 
 
 +descr-method('scan', 'scan', 'obs.scan(fn, [seed])').
-  On each value from the original
-  observable, calls the #[b fn] function with
-  the previous result returned by #[b fn] and
-  the current value emitted by the original observable.
-  At first time, calls #[b fn] with #[b seed] as previous result.
-  Emits whatever #[b fn] returns. Always creates a property.
+  Для каждого значения из исходного
+  observable, вызывает функцию #[b fn] с предыдущим результатом, 
+  возвращаемым #[b fn] и текущим значением, выданным исходным observable.
+  В первый раз вызывает #[b fn] с #[b seed] в качестве предыдущего результата.
+  Испускает все, что возвращает #[b fn]. Всегда создает property.
 
 p.
-  If no #[b seed] is provided, the first value will be used as a seed.
+  Если начальное значение #[b seed] не указано, то первое значение будет использоваться в качестве seed.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 2, 3]);
     var result = source.scan((prev, next) => next + prev, 0);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.scan] <value:current> 0
     > [sequentially.scan] <value> 1
@@ -380,7 +378,7 @@ pre(title='console output')
     > [sequentially.scan] <value> 8
     > [sequentially.scan] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---2---3X
   result: 0---1---3---5---8X
 div
@@ -389,44 +387,42 @@ div
 
 
 +descr-method('flatten', 'flatten', 'obs.flatten([transformer])').
-  For this method it's expected that the source observable emits arrays.
-  The result stream will then emit each element of these arrays.
+  Для этого метода ожидается, что наблюдаемый поток испускает массивы. 
+  Затем поток результатов будет выдавать каждый элемент этих массивов.
 
 p.
-  Always returns a stream.
+  Всегда возвращает поток.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [[1], [], [2,3]]);
     var result = source.flatten();
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatten] <value> 1
     > [sequentially.flatten] <value> 2
     > [sequentially.flatten] <value> 3
     > [sequentially.flatten] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  --------•--------•-------- •X
                  [1]       []     [2,3]
   result:  --------1-----------------23X
 div
 
 p.
-  You can also provide the #[b transformer] function
-  which will be applied to each value from #[b obs] observable,
-  and which is supposed to return an array. This makes #[b flatten] a
-  pretty powerful transformation method.
-  It allows you to do three kinds
-  of transformations on each value: change value (like map), skip value (like filter),
-  and respond with several values to a single value.
-  If you want to skip a value, return an empty array,
-  to change the value — return an array with a single new value,
-  to emit several values — return them in an array.
+  Вы также можете предоставить функцию-преобразователь - #[b transformer]
+  которая будет применяться к каждому значению из #[b obs] observable,
+  и должна возвращать массив. Это делает #[b flatten] довольно мощным методом преобразования. 
+  Он позволяет выполнять три вида преобразований для каждого значения:
+  изменять значение (такое как map), пропускать значение (такие как filter),
+  и отвечать несколькими значениями на одно значение.
+  Если вы хотите пропустить значение, верните пустой массив, для изменения значения - 
+  верните массив с одним новым значением, чтобы выдать несколько значений - верните их в массиве.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4]);
     var result = source.flatten(x => {
@@ -438,43 +434,43 @@ pre.javascript(title='example')
     });
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatten] <value> 20
     > [sequentially.flatten] <value> 40
     > [sequentially.flatten] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---4X
   result:  -------•-------•X
                  20      40
 div
 
 p.
-  See also <a href="#flat-map">flatMap</a>
+  См. также <a href="#flat-map">flatMap</a>
 
 
 
 +descr-method('delay', 'delay', 'obs.delay(wait)').
-  Delays all events by #[b wait] milliseconds,
-  with an exception for the current value of a property,
-  or the end of an already ended observable. Doesn't delay #[a(href='#about-errors') errors].
+  Задерживает все события на #[b wait] milliseconds,
+  за исключением текущего значения свойства или конца уже завершившегося
+  observable. Не задерживает #[a(href='#about-errors') errors].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(200, [1, 2, 3]);
     var result = source.delay(100);
     result.log();
 
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.delay] <value> 1
     > [sequentially.delay] <value> 2
     > [sequentially.delay] <value> 3
     > [sequentially.delay] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  -----1-----2-----3X
   result:  --------1-----2-----3X
 div
@@ -482,27 +478,27 @@ div
 
 
 +descr-method('throttle', 'throttle', 'obs.throttle(wait, [options])').
-  Return a new throttled version of the original observable, which will emit values
-  only at most once every #[b wait] milliseconds.
-  If used on a property, the current value will always pass without any delay.
+  Возвращает новую throttled версию исходного observable, который будет выдавать значения не чаще одного раза в
+  #[b wait] милисекунд.
+  Если используется property, текущее значение всегда будет передаваться без задержки.
 
 p.
-  Accepts an optional #[b options] object similar to
+  Принимает необязательный объект #[b options] аналогичный
   <a href="http://underscorejs.org/#throttle" target="_blank">underscore.throttle</a>.
-  By default, it will emit an event as soon as it comes for the first time, and,
-  if any new event comes during the wait period,
-  it will emit the last of them as soon as that period is over.
-  If you'd like to disable the leading-edge emit,
-  pass #[tt {leading: false}]. And if you'd like to disable the emit
-  on the trailing-edge, pass #[tt {trailing: false}].
+  По умолчанию он генерирует событие, как только оно происходит в первый раз, и, 
+  если какое-либо новое событие происходит в течение периода ожидания, 
+  оно генерирует последнее из них, как только этот период заканчивается.
+  Если вы хотите отключить leading-edge emit,
+  передайте #[tt {leading: false}]. И если вы хотите отключить emit
+  в trailing-edge, передайте #[tt {trailing: false}].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(750, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
     var result = source.throttle(2500);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.throttle] <value> 1
     > [sequentially.throttle] <value> 4
@@ -511,7 +507,7 @@ pre(title='console output')
     > [sequentially.throttle] <end>
 div
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  --1--2--3--4--5--6--7--8--9--0X
   result:  --1---------4---------7---------0X
 div
@@ -520,28 +516,27 @@ div
 
 
 +descr-method('debounce', 'debounce', 'obs.debounce(wait, [options])').
-  Creates a new debounced version of the original observable.
-  Will emit a value only after #[b wait] milliseconds period of no events.
-  Pass #[tt {immediate: true}] as an #[b options] object to cause
-  observable to emit a value on the leading instead of the
-  trailing edge of the #[b wait] interval.
-  If used on a property, the current value will always pass without any delay.
+  Создает новую отклоненную (debounced) версию исходного observable.
+  Будет выдавать значение только после периода отсутствия событий в #[b wait] милисекунд.
+  Передайте #[tt {immediate: true}] как объект #[b options] чтобы
+  observable выдавал значение на ведущем (leading) а не trailing крае интервала #[b wait].
+  Если используется property, текущее значение всегда будет передаваться без задержки.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 0, 0, 0, 4, 5, 6]);
     source = source.filter(x => x > 0);
     var result = source.debounce(250);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.filter.debounce] <value> 3
     > [sequentially.filter.debounce] <value> 6
     > [sequentially.filter.debounce] <end>
 div
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---------------4---5---6X
   result:  ----------------------3---------------------6X
 div
@@ -550,22 +545,22 @@ div
 
 
 +descr-method('ignore-values', 'ignoreValues', 'obs.ignoreValues()').
-  Ignores all values from the original observable, emitting only errors and end.
+  Игнорирует все значения из исходного observable, выдает только ошибки и конец.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [0, -1, 2, -3])
       .flatMap(x => x < 0 ? Kefir.constantError(x) : Kefir.constant(x));
     var result = source.ignoreValues()
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatMap.ignoreValues] <error> -1
     > [sequentially.flatMap.ignoreValues] <error> -3
     > [sequentially.flatMap.ignoreValues] <end>
 
-pre(title='events in time')
+pre(title='события во времени')
   :escapehtml
     source:  ---•---e---•---eX
                 0  -1   2  -3
@@ -577,22 +572,22 @@ div
 
 
 +descr-method('ignore-errors', 'ignoreErrors', 'obs.ignoreErrors()').
-  Ignores all errors from the original observable, emitting only values and end.
+Игнорирует все ошибки из исходного observable, выдает только значения и конец.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [0, -1, 2, -3])
       .flatMap(x => x < 0 ? Kefir.constantError(x) : Kefir.constant(x));
     var result = source.ignoreErrors()
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.flatMap.ignoreErrors] <value> 0
     > [sequentially.flatMap.ignoreErrors] <value> 2
     > [sequentially.flatMap.ignoreErrors] <end>
 
-pre(title='events in time')
+pre(title='события во времени')
   :escapehtml
     source:  ---•---e---•---eX
                 0  -1   2  -3
@@ -603,21 +598,21 @@ div
 
 
 +descr-method('ignore-end', 'ignoreEnd', 'obs.ignoreEnd()').
-  Ignores end of source observable.
+  Игнорирует end исходного observable.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.ignoreEnd();
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.ignoreEnd] <value> 1
     > [sequentially.ignoreEnd] <value> 2
     > [sequentially.ignoreEnd] <value> 3
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3X
   result:  ---1---2---3---
 div
@@ -626,17 +621,17 @@ div
 
 
 +descr-method('before-end', 'beforeEnd', 'obs.beforeEnd(fn)').
-  Allows you to insert an additional value just before the observable ends.
-  #[b fn] will be called on #[b obs]' end with no arguments,
-  and whatever it return will be emitted in the result stream before end.
+  Позволяет вам вставить дополнительное значение непосредственно перед завершением observable.
+  #[b fn] будет вызываться в конце #[b obs]'  без аргументов, и все, что он вернет,
+  будет передано в поток результатов до конца.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3]);
     var result = source.beforeEnd(() => 0);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.beforeEnd] <value> 1
     > [sequentially.beforeEnd] <value> 2
@@ -644,7 +639,7 @@ pre(title='console output')
     > [sequentially.beforeEnd] <value> 0
     > [sequentially.beforeEnd] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3 X
   result:  ---1---3---30X
 div
@@ -652,17 +647,17 @@ div
 
 
 +descr-method('sliding-window', 'slidingWindow', 'obs.slidingWindow(max, [min])').
-  Will emit arrays containing the last #[b n] values from the #[b obs] observable,
-  where #[b n] is between #[b max] and #[b min] arguments.
-  By default #[b min] equals #[tt 0].
+  Будет выдавать массивы, содержащие последние #[b n] значений из #[b obs] observable,
+  где #[b n] находится между #[b max] и #[b min] аргументами.
+  По умолчанию #[b min] равно #[tt 0].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5]);
     var result = source.slidingWindow(3, 2)
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.slidingWindow] <value> [1, 2]
     > [sequentially.slidingWindow] <value> [1, 2, 3]
@@ -670,7 +665,7 @@ pre(title='console output')
     > [sequentially.slidingWindow] <value> [3, 4, 5]
     > [sequentially.slidingWindow] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  --------1--------2--------3--------4--------5X
   result:  -----------------•--------•--------•--------•X
                         [1,2]  [1,2,3]  [2,3,4]  [3,4,5]
@@ -680,29 +675,29 @@ div
 
 
 +descr-method('buffer-while', 'bufferWhile', 'obs.bufferWhile([predicate], [options])').
-  Passes every value from the source observable to the #[b predicate] function.
-  If it returns #[tt true], adds the value to the buffer, otherwise flushes the buffer.
-  Also flushes the buffer before end, but you can disable that
-  by passing #[tt {flushOnEnd: false}] as #[b options].
+  Передает каждое значение из исходного observable в функцию #[b predicate].
+  Если она возвращает #[tt true], добавляет значение в буфер, в противном случае 
+  очищает буфер. Также очищает буфер перед завершением, но вы можете отключить это, 
+  передав #[tt {flushOnEnd: false}] как #[b options].
 
 p.
-  The default #[b predicate] is #[tt x =&gt; x].
-  If you want to omit #[b predicate] but pass #[b options],
-  pass #[tt null] as #[b predicate].
+  По умолчанию #[b predicate] это #[tt x =&gt; x].
+  Если вы хотите опустить #[b predicate] но передать #[b options],
+  передайте #[tt null] в качестве #[b predicate].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5]);
     var result = source.bufferWhile(x => x !== 3);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.bufferWhile] <value> [1, 2, 3]
     > [sequentially.bufferWhile] <value> [4, 5]
     > [sequentially.bufferWhile] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---4---5 X
   result:  -----------•--------•X
                 [1,2,3]    [4,5]
@@ -711,25 +706,25 @@ div
 
 
 +descr-method('buffer-with-count', 'bufferWithCount', 'obs.bufferWithCount(count, [options])').
-  Buffers all values from #[b obs] observable, and flushes the buffer
-  every time #[b count] values have been passed through.
-  Also flushes the buffer before end, but you can disable that
-  by passing #[tt {flushOnEnd: false}] as #[b options].
+  Буферизует все значения из #[b obs] observable, и очищает буфер каждый раз, когда значения
+  счетчика #[b count] были пройдены.
+  Также очищает буфер перед завершением, но вы можете отключить это, передав
+   #[tt {flushOnEnd: false}] в качестве #[b options].
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5]);
     var result = source.bufferWithCount(2);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.bufferWithCount] <value> [1, 2]
     > [sequentially.bufferWithCount] <value> [3, 4]
     > [sequentially.bufferWithCount] <value> [5]
     > [sequentially.bufferWithCount] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  --------1--------2--------3--------4--------5 X
   result:  -----------------•-----------------•---------•X
                         [1,2]             [3,4]       [5]X
@@ -739,43 +734,42 @@ div
 
 
 +descr-method('buffer-with-time-or-count', 'bufferWithTimeOrCount', 'obs.bufferWithTimeOrCount(interval, count, [options])').
-  Continuously buffers values from the source observable, flushing
-  every #[b interval] milliseconds, or immediately once #[b count]
-  values have been stored.
-  Also flushes the buffer before end, but you can disable that
-  by passing #[tt {flushOnEnd: false}] as #[b options].
+  Непрерывно буферизует значения из исходного observable, очищая
+  каждые #[b interval] милисекунд, сразу после сохранения значений счетчика #[b count].
+  Также очищает буфер перед завершением, но вы можете отключить это, передав 
+  #[tt {flushOnEnd: false}] в качестве #[b options].
 
 p.
-  Limited by time:
+  Ограничено по времени:
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5, 6, 7, 8]);
     var result = source.bufferWithTimeOrCount(330, 10);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.bufferWithTimeOrCount] <value> [1, 2, 3]
     > [sequentially.bufferWithTimeOrCount] <value> [4, 5, 6]
     > [sequentially.bufferWithTimeOrCount] <value> [7, 8]
     > [sequentially.bufferWithTimeOrCount] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---4---5---6---7---8 X
   result:  ------------•------------•------•X
                 [1,2,3]       [4,5,6]  [7,8]
 
 p.
-  Limited by count:
+  Ограничено количеством :
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5, 6, 7, 8]);
     var result = source.bufferWithTimeOrCount(330, 2);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.bufferWithTimeOrCount] <value> [1, 2]
     > [sequentially.bufferWithTimeOrCount] <value> [3, 4]
@@ -783,7 +777,7 @@ pre(title='console output')
     > [sequentially.bufferWithTimeOrCount] <value> [7, 8]
     > [sequentially.bufferWithTimeOrCount] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---4---5---6---7---8X
   result:  -------•-------•-------•-------•X
               [1,2]   [3,4]   [5,6]   [7,8]
@@ -793,19 +787,19 @@ div
 
 
 +descr-method('transduce', 'transduce', 'obs.transduce(transducer)').
-  This method allows you to use transducers in Kefir.
-  It supports any transducers implementation that follows
-  <a href="https://github.com/cognitect-labs/transducers-js#the-transducer-protocol">the transducer protocol</a>, for example
-  <a href="https://github.com/cognitect-labs/transducers-js">cognitect-labs/transducers-js</a> or
+  Этот метод позволяет использовать преобразователи (transducers) в Kefir.
+  Он поддерживает любую реализацию преобразователей, которая соответствует
+  <a href="https://github.com/cognitect-labs/transducers-js#the-transducer-protocol">протоколу преобразователя</a>, 
+  например
+  <a href="https://github.com/cognitect-labs/transducers-js">cognitect-labs/transducers-js</a> или
   <a href="https://github.com/jlongster/transducers.js">jlongster/transducers.js</a>.
-  To learn more about transducers please visit these library pages.
+  Чтобы узнать больше о преобразователях, посетите эти страницы библиотеки.
 
 p.
-  In the example the
-  <a href="https://github.com/cognitect-labs/transducers-js">cognitect-labs/transducers-js</a>
-  library is used.
+  В примере используется библиотека
+  <a href="https://github.com/cognitect-labs/transducers-js">cognitect-labs/transducers-js</a>.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var t = transducers;
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5, 6]);
@@ -817,25 +811,26 @@ pre.javascript(title='example')
     var result = source.transduce(myTransducer);
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.transduce] <value> 12
     > [sequentially.transduce] <value> 14
     > [sequentially.transduce] <end>
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---4---5---6X
   result:  -------•-------•X
                  12      14
 div
 
 +descr-method('thru', 'thru', 'obs.thru(transformer)').
-  Calls #[b transformer] with #[b obs] as argument and returns whatever
-  #[b transformer] returned. Put another way, #[tt o.thru(fn)] is the
-  same as #[tt fn(o)]. This allows you to integrate your helper functions
-  into chains of Kefir method calls without adding them to Observable prototype.
+  Вызывает трансформатор - #[b transformer] с аргументом #[b obs] и возвращает то, 
+  что вернул трансформатор #[b transformer].
+  Другими словами, #[tt o.thru(fn)] это то-же, что #[tt fn(o)]. 
+  Это позволяет вам интегрировать ваши вспомогательные функции в цепочки вызовов 
+  метода Kefir, не добавляя их в прототип Observable.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [1, 2, 3, 4, 5, 6]);
     var transformer = obs => obs.filter(x => x > 2);
@@ -843,12 +838,12 @@ pre.javascript(title='example')
     result.log();
 div
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---1---2---3---4---5---6X
   result:  -----------2---3---4---5X
 div
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.filter.map] <value> 2
     > [sequentially.filter.map] <value> 3
@@ -858,22 +853,21 @@ pre(title='console output')
 div
 
 +descr-method('with-handler', 'withHandler', 'obs.withHandler(handler)').
-  The most general transformation method. All other transformation methods above
-  can be implemented via #[b withHandler].
-  Will call the #[b handler] function on each event from #[b obs] observable,
-  passing to it two arguments: an <a href="#emitter-object">emitter</a>,
-  and an event object (with same format as in <a href="#on-any">onAny</a> callback).
+  Самый общий метод трансформации. Все остальные методы преобразования, указанные выше, 
+  могут быть реализованы с помощью #[b withHandler].
+  Будет вызывать функцию обработчика #[b handler] для каждого события из #[b obs] observable,
+  передавая ему два аргумента: <a href="#emitter-object">emitter</a>,
+  и объект event (в том же формате, что и в обратном вызове <a href="#on-any">onAny</a> ).
 
 p.
-  By default, it will not emit any values or errors, and it will not end when #[b obs]
-  observable ends. Instead you should implement the desired behaviour in
-  the #[b handler] function, i.e. analyse #[b event object] and call
-  #[b emitter] methods if necessary. You can call
-  the #[b emitter] methods several times in each #[b handler] execution,
-  and you can also call them any time later, for example to implement
-  <a href="#delay">delay</a>.
+  По умолчанию он не будет выдавать никаких значений или ошибок, и он не завершится, когда закончится #[b obs]
+  observable. Вместо этого вы должны реализовать желаемое поведение 
+  в функции обработчика #[b handler], то есть проанализировать объект события #[b event object] 
+  и при необходимости вызвать методы эмиттера #[b emitter]. 
+  Вы можете вызывать методы эмиттера #[b emitter] несколько раз при каждом выполнении обработчика #[b handler],
+  а также можете вызывать их в любое время позже, например, для реализации задержки  <a href="#delay">delay</a>.
 
-pre.javascript(title='example')
+pre.javascript(title='пример')
   :escapehtml
     var source = Kefir.sequentially(100, [0, 1, 2, 3]);
     var result = source.withHandler((emitter, event) => {
@@ -889,7 +883,7 @@ pre.javascript(title='example')
     });
     result.log();
 
-pre(title='console output')
+pre(title='вывод')
   :escapehtml
     > [sequentially.withHandler] <value> 1
     > [sequentially.withHandler] <value> 2
@@ -901,7 +895,7 @@ pre(title='console output')
     > [sequentially.withHandler] <end>
 div
 
-pre(title='events in time').
+pre(title='события во времени').
   source:  ---0---1--- 2---  3 X
   result:  -------•---••---••••X
                   1   22   333bye
