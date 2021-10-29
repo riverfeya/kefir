@@ -1,12 +1,12 @@
-h2#interop Interoperation with other async abstractions
+h2#interop Взаимодействие с другими асинхронными абстракциями
 
 
 +descr-method('from-promise', 'fromPromise', 'Kefir.fromPromise(promise)').
-  Converts a Promise to a Kefir Property. Uses #[tt promise.then(onFulfilled, onRejected)]
-  interface to subscribe to the promise. Also calls #[tt promise.done()]
-  (if there is such methods) to prevent libraries like
-  #[a(href='https://github.com/kriskowal/q') Q] or
-  #[a(href='https://github.com/cujojs/when') when] from swallowing exceptions.
+  Конвертирует Promise в Kefir Property. Использует интерфейс #[tt promise.then(onFulfilled, onRejected)]
+  для подписки на promise. Также вызывает #[tt promise.done()]
+  (если есть такие методы) чтобы предотвратить использование таких библиотек, как
+  #[a(href='https://github.com/kriskowal/q') Q] или
+  #[a(href='https://github.com/cujojs/when') when] или исключений, когда они проглатывают исключения.
 
 pre.javascript(title='example')
   :escapehtml
@@ -25,13 +25,14 @@ div
 
 
 +descr-method('to-promise', 'toPromise', 'obs.toPromise([PromiseConstructor])').
-  Converts an Kefir Observable to a Promise.
-  If called without arguments the default #[tt gloabal.Promise] constructor is used,
-  alternatively you can pass a promise constructor
-  that supports following interface: #[tt new Promise((resolve, reject) =&gt; { ... })].
-  The promise will be fulfilled or rejected at the moment source observable ends,
-  with the latest value or error. If observable ends without any value or error
-  the promise will never be fulfilled/rejected.
+  Конвертирует Kefir Observable в Promise.
+  Если вызывается без аргументов, используется конструктор по умолчанию #[tt gloabal.Promise],
+  в качестве альтернативы вы можете передать конструктор promise
+  который поддерживает следующий интерфейс: #[tt new Promise((resolve, reject) =&gt; { ... })].
+  Promise будет выполнено или отклонено в момент окончания наблюдаемого источника
+  с последним значением или ошибкой. 
+  Если observable заканчивается без какого-либо значения или ошибки,
+  promise никогда не будет выполнено/отклонено.
 
 pre.javascript(title='example')
   :escapehtml
@@ -48,8 +49,8 @@ div
 
 
 +descr-method('from-es-observable', 'fromESObservable', 'Kefir.fromESObservable(observable)').
-  Converts an #[a(href='https://github.com/zenparsing/es-observable') ECMAScript Observable]
-  to a Kefir Stream.
+  Конвертирует #[a(href='https://github.com/zenparsing/es-observable') ECMAScript Observable]
+  to в поток Kefir.
 
 pre.javascript(title='example')
   :escapehtml
@@ -74,12 +75,12 @@ div
 
 
 +descr-method('to-es-observable', 'toESObservable', 'obs.toESObservable()', 'obs[Symbol.observable]()').
-  Converts an Kefir Observable to an
+  Конвертирует Kefir Observable в
   #[a(href='https://github.com/zenparsing/es-observable') ECMAScript Observable].
 
 p.
-  Also available as #[tt obs[Symbol.observable]], so you can use ES Observable's
-  #[tt from] method with Kefir Observables e.g., #[tt Observable.from(Kefir.sequentially(1000, [1, 2]))].
+  Также доступен как #[tt obs[Symbol.observable]], поэтому вы можете использовать метод ES Observable
+  #[tt from] с Kefir Observables т.е., #[tt Observable.from(Kefir.sequentially(1000, [1, 2]))].
 
 pre.javascript(title='example')
   :escapehtml
@@ -103,8 +104,8 @@ div
 
 
 +descr-method('static-land', 'Static Land', 'Kefir.staticLand.Observable').
-  Provides #[a(href='https://github.com/rpominov/static-land') Static Land] compatibility.
-  The #[tt Observable] type object supports following algebras:
+  Обеспечивает совместимость с #[a(href='https://github.com/rpominov/static-land') Static Land].
+  Объект типа #[tt Observable] поддерживает следующие алгебры:
   Semigroup, Monoid, Functor, Bifunctor, Apply, Applicative, Chain, Monad.
 
 pre.javascript(title='example')
