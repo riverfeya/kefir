@@ -1,39 +1,38 @@
-h2#active-state Activation and deactivation of observables
+h2#active-state Активация и деактивация observables
 
 p.
-  At the moment one create an observable it's not yet subscribed to its source.
-  Observables subscribe to their sources only when they themselves get a first subscriber.
-  In this docs this process is called #[b activation] of an observable.
-  Also when the last subscriber is removed from an observable,
-  the observable #[b deactivates] and unsubscribes from its source.
-  Later it can be #[b activated] again, and so on.
+  В момент создания observable на его источник еще нет подписки.
+  Observables подписываются на свои источники только тогда, когда сами получают первого подписчика..
+  В этой документации этот процесс называется  #[b активацией] observable.
+  Также, когда последний подписчик удаляется из observable,
+  observable #[b деактивируется] и отписывается от своего источника.
+  Позже его можно будет  #[b активировать] , и т.д.
 
 p.
-  The #[i source] to which observable subscribe on #[b activation] may
-  be an another observable (for example in #[tt .map]),
-  several other observables (#[tt .combine]),
-  or some external source (#[tt .fromEvents]).
+  #[i источник] на который observable подписывается при #[b активации]
+  может быть другим another observable (например в #[tt .map]),
+  несколькими другими observables (#[tt .combine]),
+  или некоторым внешним источником (#[tt .fromEvents]).
 
 p.
-  For example #[tt stream = Kefir.fromEvents(el, 'click')] won't
-  immediately subscribe to the #[tt 'click'] event on #[tt el],
-  it will subscribe only when the first listener will be added to the
-  #[tt stream]. And it will automatically unsubscribe when the last listener
-  will be removed from the #[tt stream].
+  Например #[tt stream = Kefir.fromEvents(el, 'click')] не подпишется сразу на
+  событие #[tt 'click'] в #[tt el],
+  он подпишется только тогда, когда к потоку #[tt stream] будет добавлен первый слушатель.
+  И он автоматически отпишется, когда последний слушатель будет удален из потока #[tt stream].
 
 pre.javascript
   :escapehtml
     var stream = Kefir.fromEvents(el, 'click');
-    // at this moment event listener to _el_ not added
+    // на данный момент слушатель событий в _el_ не добавлен
 
     stream.onValue(someFn);
-    // now 'click' listener is added to _el_
+    // теперь прослушиватель 'click' добавлен в _el_
 
     stream.offValue(someFn);
-    // and now it is removed again
+    // и теперь он снова удален
 
 p.
-  As you might already guess #[b activation] and #[b deactivation] propagates up the observables chain.
-  For instance if one create a long chain like #[tt Kefir.fromEvents(...).map(...).filter(...).take(...)],
-  the whole chain will be #[b inactive] until first subscriber is added,
-  and then it will #[b activate] up to #[tt .fromEvents]. Same for #[b deactivation].
+  Как вы уже могли догадаться #[b activation] и #[b deactivation] распространяется вверх по цепочке observables.
+  Например, если создать длинную цепочку вроде #[tt Kefir.fromEvents(...).map(...).filter(...).take(...)],
+  вся цепочка будет неактивна - #[b inactive], пока не будет добавлен первый подписчик.
+  а затем #[b активируется] до #[tt .fromEvents]. То же самое и для #[b deactivation].
