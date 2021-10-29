@@ -1,14 +1,15 @@
-h2#emitter-object Emitter
+h2#emitter-object Эмиттер
 
 p.
-  Emitter is an object that has four methods for emitting events.
-  It is used in several places in Kefir as a proxy to emit events from some observable.
+  это объект, у которого есть четыре метода для генерации событий. Он используется 
+  в нескольких местах в Kefir в качестве прокси для генерации событий из некоторых наблюдаемых.
 
 ul
-  li #[tt emitter.value(value)] emits a value in the connected observable
-  li #[tt emitter.error(error)] emits a error in the connected observable
-  li #[tt emitter.end()] ends the connected observable
-  li #[tt emitter.event(event)] emits an event (object with same format as in #[a(href='#on-any') onAny] method) in the connected observable
+  li #[tt emitter.value(value)] выдает значение в подключенном observable
+  li #[tt emitter.error(error)] выдает ошибку в подключенном observable
+  li #[tt emitter.end()] завершает связанный observable
+  li #[tt emitter.event(event)] излучает событие (объект с тем же форматом, что и
+      в методе #[a(href='#on-any') onAny] ) в подключенном observable
 
 pre.javascript(title='example')
   :escapehtml
@@ -18,22 +19,21 @@ pre.javascript(title='example')
 div
 
 p.
-  All #[b emitter] methods are bound to their context,
-  and can be passed as callbacks safely without binding:
+  Все методы #[b emitter] привязаны к своему контексту и могут безопасно передаваться
+  как обратные вызовы без привязки:
 
 pre.javascript
   :escapehtml
-    // instead of this
+    // вместо этого:
     el.addEventListener('click', emitter.value.bind(emitter));
 
-    // you can do just this
+    // вы можете делать так:
     el.addEventListener('click', emitter.value);
 div
 
 p.
-  There also exist legacy aliases to #[b emitter] methods:
+  Существуют также устаревшие псевдонимы для методов #[b эмиттера]:
 
 ul
   li #[tt emitter.emit === emitter.value]
   li #[tt emitter.emitEvent === emitter.event]
-
