@@ -1,15 +1,15 @@
-h2#combine-two Combine two observables
+h2#combine-two Комбинирование двух observables
 
 p.
-  Just like in the <a href="#modify">"Modify an observable"</a> section,
-  most of the methods in this section will return an observable of same type as the original
-  observable (on which the method was called).
+  Как и в разделе <a href="#modify">"Изменение observable"</a> section,
+  большинство методов в этом разделе будут возвращать observable того же типа, что и исходное
+  observable (для которого был вызван метод).
 
 
 
 +descr-method('filter-by', 'filterBy', 'obs.filterBy(otherObs)').
-  Works like <a href="#filter">filter</a>, but instead of calling a predicate
-  on each value from #[b obs] observable, it checks the last value from #[b otherObs].
+  Работает как <a href="#filter">filter</a>, но вместо того, чтобы вызывать предикат
+  для каждого значения из #[b obs] observable, он проверяет последнее значение из #[b otherObs].
 
 pre.javascript(title='example')
   :escapehtml
@@ -37,15 +37,14 @@ div
 
 
 +descr-method('obs-sampled-by', 'sampledBy', 'obs.sampledBy(otherObs, [combinator])').
-  Returns a stream that emits the latest value from #[b obs] observable
-  on each value from #[b otherObs]. Ends when #[b otherObs] ends.
+  Возвращает поток, который испускает последнее значение из #[b obs] observable
+  для каждого значения из #[b otherObs]. Заканчивается, когда заканчивается #[b otherObs].
 
 p.
-  You can also provide a
-  #[b combinator] function which will be used to from the value emitted
-  by the result stream. It is called with the latest values
-  from #[b obs] and #[b otherObs] as arguments. The default #[b combinator]
-  function is #[tt (a,&nbsp;b)&nbsp;=&gt;&nbsp;a].
+  Вы также можете предоставить функцию
+  #[b combinator] которая будет использоваться для значения, испускаемого потоком результатов.
+  Он вызывается с последними значениями из #[b obs] и #[b otherObs] в качестве аргументов. 
+  Функция #[b combinator] по умолчанию это #[tt (a,&nbsp;b)&nbsp;=&gt;&nbsp;a].
 
 pre.javascript(title='example')
   :escapehtml
@@ -73,7 +72,7 @@ div
 
 
 +descr-method('skip-until-by', 'skipUntilBy', 'obs.skipUntilBy(otherObs)').
-  Skips values from #[b obs] until the first value from #[b otherObs].
+  Пропускает значения от #[b obs] до первого значения от #[b otherObs].
 
 pre.javascript(title='example')
   :escapehtml
@@ -99,8 +98,8 @@ div
 
 
 +descr-method('take-until-by', 'takeUntilBy', 'obs.takeUntilBy(otherObs)').
-  Takes values from #[b obs] until the first value from #[b otherObs] i.e.,
-  ends on the first value from #[b otherObs].
+  Принимает значения от #[b obs] до первого значения от #[b otherObs],
+  т. Е. Заканчивается на первом значении от #[b otherObs].
 
 pre.javascript(title='example')
   :escapehtml
@@ -126,16 +125,16 @@ div
 
 
 +descr-method('buffer-by', 'bufferBy', 'obs.bufferBy(otherObs, [options])').
-  Buffers all values from #[b obs] observable, and flushes the buffer
-  on each value from #[b otherObs]. Also flushes the buffer before end.
+  Буферизует все значения из #[b obs] observable, и очищает буфер для каждого
+  значения из #[b otherObs]. Также очищает буфер перед завершением.
 
 p.
-  If #[tt options.flushOnEnd] is #[tt false], the buffer
-  won't be flushed when the main observable ends.
+  Если #[tt options.flushOnEnd] имеет значение #[tt false], буфер не будет завершен,
+  когда завершится основной observable.
 
 p.
-  The result observable will emit #[tt []] in cases, when the buffer supposed to be flushed,
-  but it's empty.
+  result observable будет выдавать #[tt []] в случаях, когда буфер должен быть очищен, 
+  но он пуст.
 
 
 pre.javascript(title='example')
@@ -165,26 +164,25 @@ div
 
 
 +descr-method('buffer-while-by', 'bufferWhileBy', 'obs.bufferWhileBy(otherObs, [options])').
-  Similar to #[a(href="#buffer-while") bufferWhile], but instead of using a
-  predicate function it uses another observable.
-  On each value from #[b obs] observable:
-  if the last value from #[b otherObs] was truthy, adds the new value to the buffer,
-  otherwise flushes the buffer (with the new value included).
+  Similar to #[a(href="#buffer-while") bufferWhile], но вместо использования функции предиката
+  он использует другой observable.
+  Для каждого значения из #[b obs] observable:
+  если последнее значение из #[b otherObs] было истинным, добавляет новое значение в буфер, 
+  в противном случае очищает буфер (с включенным новым значением).
 
 p.
-  If #[tt options.flushOnEnd] is #[tt false], the buffer
-  won't be flushed when the main observable ends.
+  Если #[tt options.flushOnEnd] имеет значение #[tt false], буфер не будет сброшен, когда
+  основной observable завершится.
 
 p.
-  If #[tt options.flushOnChange] is #[tt true], the buffer will be also flushed
-  each time the controlling observable emits #[tt false].
+  Если #[tt options.flushOnChange] имеет значение #[tt true], буфер также будет очищаться каждый раз,
+  когда контролирующий observable выдает #[tt false].
 
 p.
-  The result observable will emit #[tt []] in cases, when the buffer supposed to be flushed,
-  but it's empty.
+  Результирующий observable будет выдавать #[tt []] в случаях, когда буфер должен быть очищен, но он пуст.
 
 p.
-  The default options are #[tt {flushOnEnd: true, flushOnChange: false}].
+  Параметры по умолчанию #[tt {flushOnEnd: true, flushOnChange: false}].
 
 
 pre.javascript(title='example')
@@ -209,4 +207,3 @@ pre(title='events in time').
   result:  --------------•----•--------------•----•X
                  [1, 2, 3]  [4]      [5, 6, 7]  [8]
 div
-
