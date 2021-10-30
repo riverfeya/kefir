@@ -1,9 +1,9 @@
 h2#about-errors Errors
 
 p.
-  Kefir supports an additional channel to pass data through observables — errors.
-  Unlike values, errors normally just flow through the observable chain
-  without any transformation. Consider this example:
+  Кефир поддерживает дополнительный канал для передачи данных через observables — errors.
+  В отличие от значений, ошибки обычно просто проходят через цепочку observable
+  без какого-либо преобразования. Рассмотрим пример:
 
 pre.javascript(title='example')
   :escapehtml
@@ -36,11 +36,10 @@ pre(title='events in time')
 div
 
 p.
-  As you can see values are being mapped and filtered,
-  but errors just flow unchanged.
-  Also notice that observable doesn't end on an error by default,
-  but you can use the #[a(href='#take-errors') takeErrors] method to make it happen.
-  Consider a slight change to the above example:
+  Как видите, значения отображаются и фильтруются, но ошибки просто не меняются.
+  Также обратите внимание, что по умолчанию observable не завершается ошибкой,
+  но вы можете использовать метод  #[a(href='#take-errors') takeErrors] чтобы это произошло.
+  Рассмотрим небольшое изменение в приведенном выше примере:
 
 pre.javascript(title='example')
   :escapehtml
