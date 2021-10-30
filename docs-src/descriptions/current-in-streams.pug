@@ -1,44 +1,43 @@
-h2#current-in-streams Current values/errors in streams
+h2#current-in-streams Current values/errors в потоках
 
 p.
-  Normally in Kefir only Properties have current values, but depending on how we
-  define "current value" we might say that Streams also may have them.
+  Обычно в Kefir текущие значения имеют только свойства, но в зависимости от того, 
+  как мы определяем «текущее значение», мы можем сказать, что они также могут быть у потоков.
 
 p.
-  Let's see how we get current values from Properties first. There is no
-  direct access to the current value of a property, we can't do something like
-  #[tt prop.getCurrent()]. Instead we subscribe to the property using
-  #[tt onValue(callback)] for example, and our callback gets called immediately
-  with the current value.
+  Давайте сначала посмотрим, как мы получаем текущие значения из свойств. 
+  Нет прямого доступа к текущему значению свойства, мы не можем сделать что-то вроде
+  #[tt prop.getCurrent()]. Вместо этого мы подписываемся на свойство, используя, например,
+  #[tt onValue(callback)], и наш обратный вызов немедленно вызывается с текущим значением.
 
 p.
-  If we define "current value" through that technical detail of getting it:
-  current value is the value that we get in the callback immediately after subscribing.
-  Then we can say that sometimes Streams also may have current values.
+  Если мы определим «текущее значение» через эту техническую деталь его получения: 
+  текущее значение - это значение, которое мы получаем в обратном вызове сразу после подписки. 
+  Тогда мы можем сказать, что иногда потоки также могут иметь текущие значения.
 
 p.
-  Let see some examples.
+  Рассмотрим некоторые примеры.
 
 pre.javascript(title='example')
   :escapehtml
-    // This is the most straightforward way for creating such a stream
+    // Это самый простой способ создать такой поток.
     var s1 = Kefir.stream(emitter => {
       emitter.emit(1);
     });
 
-    // But it can be created accidentally or intentionally in some other cases, such as
+    // Но он может быть создан случайно или намеренно в некоторых других случаях, например,
     var s2 = Kefir.merge([Kefir.constant(1), Kefir.never()]);
     var s3 = Kefir.combine([Kefir.constant(1), Kefir.constant(1)]);
 
 p.
-  This feature of Streams has its cons and pros.
+  У этой функции Streams есть свои плюсы и минусы.
 
 h3 Cons
 
 p.
-  Only first subscriber gets that value. Even if it was an #[tt onEnd]
-  or #[tt onError] subscriber, it'll still "consume" the "current value".
-  Let's see it in an example:
+  Это значение получает только первый подписчик. Даже если это был подписчик #[tt onEnd]
+  или #[tt onError], он все равно «потребляет» ("consume")  "current value".
+  Рассмотрим некоторые примеры:
 
 pre.javascript(title='example')
   :escapehtml
@@ -46,61 +45,59 @@ pre.javascript(title='example')
       emitter.emit(1);
     });
     stream.onValue(x => console.log('first', x)); // logs "first 1"
-    stream.onValue(x => console.log('second', x)); // won't log
+    stream.onValue(x => console.log('second', x)); // не войдет
 
 
-    // Even with onError it will be consumed
+    // Даже с onError оно будет потреблено 
     var stream2 = ...
     stream.onError(fn);
-    stream.onValue(x => console.log('second', x)); // won't log
+    stream.onValue(x => console.log('second', x)); // не войдет
 
 p.
-  This is fixed in Properties as they remember the last value, and call
-  any new subscriber with it.
+  Это зафиксировано в свойствах, поскольку они запоминают последнее значение и вызывают с ним любого нового подписчика.
 
 p.
-  Another issue is that it's not very good from semantics point of view.
-  The moment when an event happens in a stream depends on the moment when the stream
-  gets the first subscriber. That makes subscribing not a pure operation, and whole
-  system gets less declarative and functional.
+  Другая проблема в том, что это не очень хорошо с точки зрения семантики. 
+  Момент, когда в потоке происходит событие, зависит от момента, когда поток
+  получает первого подписчика.
+  Это делает подписку не чистой операцией, а вся система становится менее декларативной и функциональной.
 
 
 h3 Pros
 
 p.
-  This feature allows you to define current value in a stream. Well it sounds
-  just like the definition of the feature, but let's just look at an example,
-  hopefully it'll help you understand what I mean:
+  Эта функция позволяет вам определять текущее значение в потоке. Что ж, это звучит так же, 
+  как определение функции, но давайте просто посмотрим на пример, надеюсь, он поможет вам понять, что я имею в виду:
 
 pre.javascript(title='example')
   :escapehtml
     var scrollTopStream = Kefir.stream(emitter => {
-      emitter.emit(window.scrollY); // here we are emitting the current value!
+      emitter.emit(window.scrollY); // здесь мы выдаем текущее значение!
       window.addEventListener('scroll', () => {
         emitter.emit(window.scrollY);
       });
     });
 
-    // Let's now convert it to a property like good citizens
+    // Давайте теперь превратим его в property как у хороших граждан
     var scrollTopProperty = scrollTopStream.toProperty();
 
 p.
-  Another benefit is that it makes possible to not lose
-  current values when converting properties to streams and then back to properties.
-  For example, #[a(href='#combine') combine] always returns a stream
-  (#[a(href='https://github.com/kefirjs/kefir/issues/44#issuecomment-72875317') why?])
-  but it'll still emit the current value.
-  So one can do #[tt Kefir.combine([p1, p2], fn).toProperty()],
-  and get a property combined from two other properties with the correct current value.
+  Еще одно преимущество заключается в том, что это позволяет не терять текущие значения
+  при преобразовании свойств в потоки, а затем обратно в свойства.
+  Например, #[a(href='#combine') combine] всегда возвращает поток
+  (#[a(href='https://github.com/kefirjs/kefir/issues/44#issuecomment-72875317') почему?])
+  но он все равно будет выдавать текущее значение.
+  Таким образом, можно выполнить #[tt Kefir.combine([p1, p2], fn).toProperty()],
+  и получить свойство, объединенное из двух других свойств с правильным текущим значением.
 
 
 h3 P.S.
 
 p.
-  Note that all this applies to #[a(href='#about-errors') errors] as well.
+  Обратите внимание, что все это относится и к #[a(href='#about-errors') errors].
 
 p.
-  Also it's a good practice to convert all streams that might
-  emit current values to properties by using the #[b toProperty] method.
-  That should make your code more reliable as all subscribers will get current values.
-  And it's just better semantically as current values should live in properties.
+  Также рекомендуется преобразовывать все потоки, которые могут передавать 
+  текущие значения в свойства, с помощью метода #[b toProperty].
+  Это должно сделать ваш код более надежным, поскольку все подписчики получат текущие значения. 
+  И это просто семантически лучше, поскольку текущие значения должны находиться в свойствах.
